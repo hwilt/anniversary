@@ -56,8 +56,7 @@
 
   /* Under a year in, a "0 years" tile only announces the zero, so the whole
      tile sits out until there's a year to show. It comes back on its own at
-     the first anniversary. home.css has the [hidden] rule this needs — an
-     author `display` would otherwise win over the browser's default. */
+     the first anniversary. base.css has the [hidden] rule this leans on. */
   var yearsTile = section.querySelector('[data-count="years"]');
   if (yearsTile && yearsTile.parentNode) {
     yearsTile.parentNode.hidden = years === 0;

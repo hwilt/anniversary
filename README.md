@@ -16,7 +16,8 @@ public/            # everything served publicly (Cloudflare assets directory)
 │   ├── home.css   # index.html only
 │   └── error.css  # 404 page only
 ├── js/
-│   └── counter.js # days together, and time until the next anniversary
+│   ├── counter.js # days together, and time until the next anniversary
+│   └── wordle.js  # the word game, and its puzzle list
 └── favicon.svg
 wrangler.jsonc     # deploy config (not served)
 ```
@@ -34,6 +35,34 @@ The start date lives in `public/index.html` in two places, and nowhere else:
 - `data-since="YYYY-MM-DD"` on `<section class="counter">`, which is what's counted
 
 Change both together.
+
+## The word game
+
+Wordle, with your own words. The puzzle list is the `PUZZLES` array at the top
+of `public/js/wordle.js`:
+
+```js
+{ answer: 'TUFJTkU=', hint: 'Shown as soon as this word comes up.' }
+```
+
+The hint goes up with the board, before any guessing — so write it as a clue,
+not as a reveal. It stays on screen while the word is being solved.
+
+Answers are base64 so that a glance at the page source doesn't spoil them.
+That's a spoiler guard, not a secret — anyone determined can still decode it,
+so don't put anything in there you'd mind being read. To encode a word, run
+this in a browser console:
+
+```js
+btoa('MAINE')   // -> 'TUFJTkU='
+```
+
+Any word length works; the grid sizes itself to the answer. Guesses aren't
+checked against a dictionary — any string of the right length is accepted,
+which keeps names and inside jokes playable.
+
+Progress is kept in `localStorage` under `anniversary.wordle.solved`, so
+solved words stay solved across visits. "Play again" clears it.
 
 ## Local development
 

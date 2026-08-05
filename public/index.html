@@ -42,6 +42,32 @@
     <p class="next-up" data-next-up></p>
   </section>
 
+  <section class="game" id="game">
+    <h2>A little game</h2>
+    <p class="game-intro">Six tries. Green is in the right spot, clay is in the word but somewhere else.</p>
+
+    <noscript>
+      <p class="game-intro">This one needs JavaScript turned on.</p>
+    </noscript>
+
+    <!-- The clue for the current word. aria-live so that moving to the next
+         word announces its hint, rather than changing it silently. -->
+    <p class="game-hint" data-hint aria-live="polite" hidden></p>
+
+    <div class="board" data-board></div>
+
+    <p class="game-note" data-note hidden></p>
+
+    <div class="keyboard" data-keyboard></div>
+
+    <p class="game-status" role="status" aria-live="polite" data-status></p>
+
+    <div class="game-actions">
+      <button class="btn" type="button" data-next hidden>Next word →</button>
+      <button class="btn btn-quiet" type="button" data-reset hidden>Play again</button>
+    </div>
+  </section>
+
   <footer>
     made with love
   </footer>
@@ -49,6 +75,7 @@
 </div>
 
 <script src="/js/counter.js" defer></script>
+<script src="/js/wordle.js" defer></script>
 
 </body>
 </html>

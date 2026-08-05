@@ -22,6 +22,12 @@
 /* ---------- Reset & base ---------- */
 * { box-sizing: border-box; }
 
+/* The browser's own [hidden] rule is in its stylesheet, so any author `display`
+   — .btn's inline-block, a flex row — silently outranks it and the element
+   stays on screen. Restate it here, once, so `el.hidden = true` means hidden
+   no matter what the component sets. */
+[hidden] { display: none !important; }
+
 html { scroll-behavior: smooth; }
 
 body {

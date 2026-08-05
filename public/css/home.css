@@ -51,9 +51,8 @@
   align-items: center;
 }
 
-/* counter.js hides the years tile while it's still 0. Needed because the
-   display above would otherwise beat the browser's own [hidden] rule. */
-.count[hidden] { display: none; }
+/* counter.js hides this while the years count is still 0; base.css has the
+   [hidden] rule that makes that stick. */
 
 .num {
   font-family: var(--font-display);
@@ -80,6 +79,207 @@
   margin: 6vh 0 0;
   /* Reserves the line's height so revealing it doesn't shift the footer. */
   min-height: 1.65em;
+}
+
+/* ===========================================================
+   The word game
+   =========================================================== */
+.game {
+  margin-top: 14vh;
+  text-align: center;
+}
+
+.game h2 {
+  font-size: clamp(26px, 5vw, 34px);
+  font-weight: 400;
+}
+
+.game-intro {
+  font-size: 15px;
+  opacity: 0.75;
+  margin: 10px auto 32px;
+  max-width: 42ch;
+}
+
+/* ---------- Hint for the current word ---------- */
+.game-hint {
+  font-family: var(--font-display);
+  font-size: clamp(18px, 4vw, 22px);
+  color: var(--maroon);
+  margin: 0 auto 28px;
+  max-width: 34ch;
+  line-height: 1.4;
+}
+
+/* ---------- Board ---------- */
+.board {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.row {
+  display: grid;
+  /* wordle.js sets --cols from the answer's length. */
+  grid-template-columns: repeat(var(--cols, 5), 1fr);
+  gap: 8px;
+}
+
+.tile {
+  width: clamp(44px, 12vw, 58px);
+  height: clamp(44px, 12vw, 58px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: clamp(22px, 6vw, 30px);
+  line-height: 1;
+  color: var(--ink);
+  border: 2px solid var(--cream-deep);
+  border-radius: 4px;
+  transition: background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+}
+
+.tile.filled { border-color: var(--green); }
+
+.tile.correct {
+  background: var(--green);
+  border-color: var(--green);
+  color: var(--cream);
+}
+
+.tile.present {
+  background: var(--clay);
+  border-color: var(--clay);
+  color: var(--cream);
+}
+
+.tile.absent {
+  background: var(--cream-deep);
+  border-color: var(--cream-deep);
+  color: var(--ink);
+  opacity: 0.55;
+}
+
+/* Nudge for a row that isn't a full-length word yet. */
+@keyframes nudge {
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+.row.bad { animation: nudge 0.18s ease-in-out 2; }
+
+@media (prefers-reduced-motion: reduce) {
+  .row.bad { animation: none; }
+}
+
+/* ---------- Note revealed on solving ---------- */
+.game-note {
+  font-family: var(--font-display);
+  font-size: clamp(18px, 4vw, 22px);
+  color: var(--maroon);
+  margin: 0 auto 28px;
+  max-width: 34ch;
+  line-height: 1.4;
+}
+
+/* ---------- Keyboard ---------- */
+.keyboard {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  /* The rows size themselves off this, so cap it rather than letting keys
+     stretch across a wide desktop window. */
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+/* Keys are sized in proportion to the row rather than in pixels, so every row
+   fills the same width and nothing can overflow on a narrow screen. Each row
+   adds up to 10 units: 10 letters on top, 9 letters plus two half-width
+   spacers in the middle, 7 letters plus two 1.6-unit keys on the bottom. */
+.key-row {
+  display: flex;
+  gap: 5px;
+  width: 100%;
+}
+
+/* Half-unit stubs that centre the middle row, the way a real keyboard's rows
+   sit offset from each other. */
+.key-row.indent::before,
+.key-row.indent::after {
+  content: '';
+  flex: 0.5 1 0;
+}
+
+.key {
+  flex: 1 1 0;
+  /* Without this, a flex item refuses to shrink below its text width, which is
+     what pushed ENTER out of its own key. */
+  min-width: 0;
+  height: 46px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  background: var(--cream-deep);
+  color: var(--ink);
+  border: none;
+  /* Buttons come with padding of their own (1px 6px in Chrome), which is 12px
+     off the usable width of every key. */
+  padding: 0;
+  border-radius: 4px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+/* ENTER and DEL hold words, so they take a wider share of the row. The label
+   scales with the viewport because a 1.6-unit key on a 320px screen is only
+   about 31px wide, which ENTER at a fixed 11px does not fit inside. */
+.key.wide {
+  flex: 1.6 1 0;
+  font-size: clamp(9px, 2.6vw, 11px);
+  letter-spacing: 0;
+}
+
+.key:hover { background: #d6c4a6; }
+
+.key.correct { background: var(--green); color: var(--cream); }
+.key.present { background: var(--clay); color: var(--cream); }
+
+.key.absent {
+  opacity: 0.4;
+  color: var(--ink);
+}
+
+/* ---------- Status & actions ---------- */
+.game-status {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--green);
+  /* Held open so announcements don't shove the buttons around. */
+  min-height: 1.6em;
+  margin: 20px 0 0;
+}
+
+.game-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.btn-quiet {
+  background: transparent;
+  color: var(--green);
+  border: 1px solid var(--cream-deep);
+}
+
+.btn-quiet:hover {
+  background: var(--cream-deep);
+  color: var(--ink);
 }
 
 /* ---------- Footer ---------- */
