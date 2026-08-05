@@ -5,6 +5,16 @@
   "observability": {
     "enabled": true
   },
+  // Cloudflare creates and manages the DNS record for this hostname on deploy.
+  // Requires the hwilt.com zone to be on the same account.
+  "routes": [
+    {
+      "pattern": "anniversary.hwilt.com",
+      "custom_domain": true
+    }
+  ],
+  // The custom domain is the only way in — no anniversary.*.workers.dev twin.
+  "workers_dev": false,
   "assets": {
     "directory": "./public",
     "not_found_handling": "404-page"

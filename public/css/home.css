@@ -51,6 +51,10 @@
   align-items: center;
 }
 
+/* counter.js hides the years tile while it's still 0. Needed because the
+   display above would otherwise beat the browser's own [hidden] rule. */
+.count[hidden] { display: none; }
+
 .num {
   font-family: var(--font-display);
   font-size: clamp(44px, 10vw, 76px);
