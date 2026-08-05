@@ -1,0 +1,117 @@
+/* ===========================================================
+   base.css — design tokens, reset, and shared components.
+   Loaded by every page, before that page's own stylesheet.
+   =========================================================== */
+
+/* ---------- Design tokens ---------- */
+:root {
+  --cream: #EEE0CC;
+  --cream-deep: #E3D3B8;
+  --green: #607456;
+  --clay: #BA6A4C;
+  --maroon: #7B2525;
+  --ink: #2B2A25;
+
+  --max-w: 880px;
+
+  --font-body: 'Public Sans', sans-serif;
+  --font-display: 'Fraunces', serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+/* ---------- Reset & base ---------- */
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--cream);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.65;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+  color: var(--maroon);
+  margin: 0;
+}
+
+a { color: var(--green); }
+a:hover { color: var(--clay); }
+
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--clay);
+  outline-offset: 3px;
+}
+
+/* ---------- Nav ---------- */
+/* Shared shell. Home layers sticky/pill behaviour on top of this. */
+.nav-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 20px 24px;
+}
+
+.name {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.name:hover { color: var(--clay); }
+
+/* ---------- Button ---------- */
+.btn {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  background: var(--green);
+  color: var(--cream);
+  text-decoration: none;
+  padding: 12px 22px;
+  border-radius: 4px;
+  transition: background 0.15s ease;
+}
+
+.btn:hover {
+  background: var(--clay);
+  color: var(--cream);
+}
+
+/* ---------- Contour divider (signature element) ---------- */
+/* Pages set their own stroke colour, height and margins. */
+.contour {
+  display: block;
+  width: 100%;
+}
+
+.contour path {
+  fill: none;
+  stroke: var(--green);
+  stroke-width: 1.5;
+  opacity: 0.55;
+}
+
+/* Waypoints on the 404's trail. Filled rather than stroked, and kept clear of
+   the viewBox edges in the markup so they aren't clipped in half. */
+.contour .mark {
+  fill: var(--green);
+  stroke: none;
+  opacity: 0.55;
+}
+
+/* ---------- Accessibility ---------- */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { transition: none !important; }
+}

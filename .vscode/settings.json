@@ -1,0 +1,18 @@
+{
+  // The site is served from public/ in production (see wrangler.jsonc), and the
+  // pages reference assets with absolute paths like /css/base.css. Point the
+  // preview servers at the same root so those paths resolve locally too.
+
+  // ms-vscode.live-server ("Live Preview") — path relative to workspace root.
+  "livePreview.serverRoot": "public",
+
+  // ritwickdey.liveserver ("Live Server") — leading slash, relative to workspace.
+  "liveServer.settings.root": "/public",
+
+  // wrangler.jsonc points $schema at unpkg, which VS Code does not trust out of
+  // the box. The schema is only published there — SchemaStore's wrangler entry
+  // just redirects to the same host — so allow it rather than drop validation.
+  "json.schemaDownload.trustedDomains": {
+    "https://unpkg.com/": true
+  }
+}

@@ -1,0 +1,23 @@
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+.env*
+!.env.example
+
+# Visual Studio Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/*.code-snippets
+!*.code-workspace
+
+# Claude Code (local, machine-specific)
+.claude/settings.local.json
+
+# Operating System files
+.DS_Store
+Thumbs.db
+ehthumbs.db

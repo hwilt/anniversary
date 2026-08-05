@@ -1,0 +1,88 @@
+/* ===========================================================
+   home.css — the anniversary landing page only.
+   Loaded after base.css, which supplies the tokens and reset.
+   =========================================================== */
+
+.wrap {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ---------- Hero ---------- */
+.hero {
+  padding: 18vh 0 6vh;
+  text-align: center;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  text-transform: lowercase;
+  color: var(--green);
+  margin-bottom: 14px;
+}
+
+.hero h1 {
+  font-size: clamp(56px, 14vw, 128px);
+  line-height: 1;
+  font-weight: 400;
+}
+
+/* ---------- Contour divider ---------- */
+/* base.css owns the shape; the page sets its size and spacing. */
+.contour {
+  height: 28px;
+  margin: 4vh 0 8vh;
+}
+
+/* ---------- Counter ---------- */
+.count-row {
+  display: flex;
+  justify-content: center;
+  gap: clamp(32px, 10vw, 96px);
+  flex-wrap: wrap;
+}
+
+.count {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.num {
+  font-family: var(--font-display);
+  font-size: clamp(44px, 10vw, 76px);
+  line-height: 1;
+  color: var(--maroon);
+  /* Keeps the layout from twitching when a digit rolls over. */
+  font-variant-numeric: tabular-nums;
+}
+
+.unit {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  color: var(--green);
+  margin-top: 10px;
+}
+
+.next-up {
+  text-align: center;
+  font-size: 15px;
+  color: var(--ink);
+  opacity: 0.75;
+  margin: 6vh 0 0;
+  /* Reserves the line's height so revealing it doesn't shift the footer. */
+  min-height: 1.65em;
+}
+
+/* ---------- Footer ---------- */
+footer {
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--green);
+  padding: 12vh 0 6vh;
+}

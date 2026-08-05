@@ -1,0 +1,51 @@
+/* ===========================================================
+   error.css — styles for the 404 page (404.html).
+   Requires base.css.
+   =========================================================== */
+
+/* Column layout so the nav sits above the card and the card centres in
+   whatever space is left. Avoids the two ever overlapping on short viewports. */
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+nav { flex-shrink: 0; }
+
+.error-card {
+  max-width: 520px;
+  padding: 24px;
+  text-align: center;
+  /* Centres in the leftover space below the nav, on both axes */
+  margin: auto;
+}
+
+.error-card p {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  margin: 0 0 28px;
+}
+
+.code {
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--green);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 12px;
+}
+
+.error-card h1 {
+  font-weight: 600;
+  font-size: clamp(2rem, 6vw, 2.8rem);
+  margin: 0 0 16px;
+  line-height: 1.1;
+}
+
+/* ---------- Contour divider ---------- */
+.contour {
+  max-width: 320px;
+  height: 24px;
+  margin: 24px auto;
+}
