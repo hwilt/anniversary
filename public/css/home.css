@@ -401,28 +401,54 @@
 /* ---------- The album ---------- */
 .photos {
   margin: 0 auto 34px;
+  /* Room for the fanned cards to lean into. They're offset and rotated, which
+     grows their box well past the stage — without this the stack pushes off
+     the side of a 320px screen. */
+  padding: 0 24px;
 }
 
-/* Positioning context for the arrows, sized to the frame so they sit against
-   the photo's edges rather than the page's. */
 .photo-stage {
-  position: relative;
   width: 100%;
-  max-width: 520px;
+  max-width: 300px;
   margin: 0 auto;
 }
 
+/* A fixed shape keeps the page from jumping as photos of different
+   proportions come and go. Taller than wide, like a polaroid mount. */
 .photo-frame {
   position: relative;
-  /* A fixed shape keeps the page from jumping as photos of different
-     proportions come and go. */
-  aspect-ratio: 3 / 2;
-  background: var(--cream-deep);
-  border-radius: 6px;
-  overflow: hidden;
+  aspect-ratio: 4 / 5;
 }
 
-.photo-frame img {
+/* Each photo sits in its own mount, stacked in the frame. The current one
+   sits square on top; the next couple fan out behind it so the stack itself
+   hints there's more to see. Clicking the front card advances, same as the
+   next arrow. */
+.polaroid {
+  position: absolute;
+  inset: 0;
+  background: var(--cream);
+  border-radius: 3px;
+  padding: 10px 10px 26px;
+  box-shadow: 0 8px 20px rgba(43, 42, 37, 0.28);
+  transition: transform 0.4s cubic-bezier(.2, .7, .3, 1), opacity 0.3s ease;
+  cursor: default;
+  pointer-events: none;
+}
+
+.polaroid.is-front {
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.polaroid-photo {
+  position: absolute;
+  inset: 10px 10px 26px;
+  overflow: hidden;
+  background: var(--cream-deep);
+}
+
+.polaroid-photo img {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -430,38 +456,37 @@
   /* contain, not cover: these are photos of people, and cropping to fill the
      frame is how someone ends up with their head cut off. */
   object-fit: contain;
-  opacity: 0;
-  transition: opacity 0.35s ease;
 }
 
-.photo-frame img.is-current { opacity: 1; }
+.photo-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  margin-top: 18px;
+}
 
 .photo-nav {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 40px;
-  height: 40px;
+  width: 38px;
+  height: 38px;
   padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   border: none;
   border-radius: 50%;
-  background: rgba(43, 42, 37, 0.55);
+  background: var(--ink);
   color: var(--cream);
   cursor: pointer;
-  transition: background 0.15s ease;
+  transition: background 0.15s ease, transform 0.15s ease;
 }
 
-.photo-nav:hover { background: rgba(43, 42, 37, 0.8); }
-
-.photo-nav.prev { left: 10px; }
-.photo-nav.next { right: 10px; }
+.photo-nav:hover { background: var(--maroon); }
+.photo-nav:active { transform: scale(0.92); }
 
 .photo-nav svg {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   fill: none;
   stroke: currentColor;
   stroke-width: 2.2;
@@ -474,7 +499,9 @@
   font-size: 12px;
   letter-spacing: 0.08em;
   color: var(--green);
-  margin: 14px 0 0;
+  margin: 0;
+  min-width: 4.5em;
+  text-align: center;
 }
 
 /* ---------- Keyboard ---------- */

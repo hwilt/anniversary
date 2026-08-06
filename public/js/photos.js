@@ -24,37 +24,72 @@
   var countEl = document.querySelector('[data-photo-count]');
   if (!section || !frame || !PHOTOS.length) return;
 
-  var slides = [];
+  var cards = [];
   var at = 0;
 
-  /* Every photo gets its own <img>, stacked in the frame and cross-faded,
-     rather than one <img> whose src is swapped. Swapping means the new file
-     is still decoding when the old one disappears, which shows as a blank
-     frame on the first pass through. These are lazy, so nothing is fetched
-     until the album is actually on screen. */
+  /* Every photo gets its own polaroid mount, stacked in the frame. Rather
+     than swap one <img>'s src (which shows a blank frame while the new file
+     is still decoding), each card stays in the DOM and show() just re-ranks
+     them. These are lazy, so nothing is fetched until the album is on
+     screen. */
   function build() {
-    PHOTOS.forEach(function (photo, i) {
+    PHOTOS.forEach(function (photo) {
+      var card = document.createElement('div');
+      card.className = 'polaroid';
+
+      var mount = document.createElement('div');
+      mount.className = 'polaroid-photo';
+
       var img = document.createElement('img');
       img.src = photo.src;
       img.alt = photo.alt || '';
       img.loading = 'lazy';
       img.decoding = 'async';
       img.draggable = false;
-      if (i !== 0) img.setAttribute('aria-hidden', 'true');
-      frame.appendChild(img);
-      slides.push(img);
+
+      mount.appendChild(img);
+      card.appendChild(mount);
+
+      /* The front card is the only one with pointer-events on (see
+         home.css), so this only ever fires for it. */
+      card.addEventListener('click', function () { step(1); });
+
+      frame.appendChild(card);
+      cards.push(card);
     });
   }
 
+  /* Fans the next couple of cards out behind the current one so the stack
+     hints there's more to see; anything further back is fully hidden. */
   function show(i) {
     /* Wraps in both directions; the modulo alone goes negative going back. */
     at = ((i % PHOTOS.length) + PHOTOS.length) % PHOTOS.length;
 
-    slides.forEach(function (img, n) {
-      var current = n === at;
-      img.classList.toggle('is-current', current);
-      if (current) img.removeAttribute('aria-hidden');
-      else img.setAttribute('aria-hidden', 'true');
+    cards.forEach(function (card, n) {
+      var rel = ((n - at) % PHOTOS.length + PHOTOS.length) % PHOTOS.length;
+      var current = rel === 0;
+
+      card.classList.toggle('is-front', current);
+      if (current) card.removeAttribute('aria-hidden');
+      else card.setAttribute('aria-hidden', 'true');
+
+      if (rel === 0) {
+        card.style.transform = 'none';
+        card.style.opacity = '1';
+        card.style.zIndex = 30;
+      } else if (rel === 1) {
+        card.style.transform = 'translate(10px, 10px) rotate(6deg)';
+        card.style.opacity = '.92';
+        card.style.zIndex = 20;
+      } else if (rel === 2) {
+        card.style.transform = 'translate(18px, 18px) rotate(-6deg)';
+        card.style.opacity = '.78';
+        card.style.zIndex = 10;
+      } else {
+        card.style.transform = 'translate(18px, 18px) rotate(-6deg)';
+        card.style.opacity = '0';
+        card.style.zIndex = 0;
+      }
     });
 
     if (countEl) countEl.textContent = at + 1 + ' of ' + PHOTOS.length;
@@ -104,7 +139,7 @@
   }, { passive: true });
 
   document.addEventListener('anniversary:finished', function () {
-    if (!slides.length) build();
+    if (!cards.length) build();
     /* A different photo each time the game is finished. */
     show(Math.floor(Math.random() * PHOTOS.length));
     section.hidden = false;

@@ -115,15 +115,16 @@
       <div class="photo-stage">
         <div class="photo-frame" data-photo-frame></div>
 
-        <button class="photo-nav prev" type="button" data-photo-prev aria-label="Previous photo">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 4 7 12l8 8" /></svg>
-        </button>
-        <button class="photo-nav next" type="button" data-photo-next aria-label="Next photo">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4l8 8-8 8" /></svg>
-        </button>
+        <div class="photo-controls">
+          <button class="photo-nav prev" type="button" data-photo-prev aria-label="Previous photo">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 4 7 12l8 8" /></svg>
+          </button>
+          <p class="photo-count" data-photo-count aria-live="polite"></p>
+          <button class="photo-nav next" type="button" data-photo-next aria-label="Next photo">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4l8 8-8 8" /></svg>
+          </button>
+        </div>
       </div>
-
-      <p class="photo-count" data-photo-count aria-live="polite"></p>
     </section>
 
     <div class="keyboard" data-keyboard></div>
