@@ -17,7 +17,9 @@ public/            # everything served publicly (Cloudflare assets directory)
 │   └── error.css  # 404 page only
 ├── js/
 │   ├── counter.js # days together, and time until the next anniversary
-│   └── wordle.js  # the word game, and its puzzle list
+│   ├── wordle.js  # the word game, and its puzzle list
+│   └── photos.js  # the album shown once the game is finished
+├── images/        # web-sized photos for the album
 └── favicon.svg
 wrangler.jsonc     # deploy config (not served)
 ```
@@ -63,6 +65,33 @@ which keeps names and inside jokes playable.
 
 Progress is kept in `localStorage` under `anniversary.wordle.solved`, so
 solved words stay solved across visits. "Play again" clears it.
+
+## The album
+
+Solving every word reveals a photo under the closing message, starting on a
+random one, with arrows either side to move through the rest. Arrow keys and
+swiping work too.
+
+The list is the `PHOTOS` array at the top of `public/js/photos.js`:
+
+```js
+{ src: '/images/DSC00791.JPG', alt: 'A short description of the photo.' }
+```
+
+`wordle.js` doesn't know the album exists — it fires an `anniversary:finished`
+event and `photos.js` listens for it. That's also why `photos.js` is loaded
+first in `index.html`: returning to an already-finished game fires that event
+during load, so the listener has to be registered before it.
+
+### Adding photos
+
+Files in `public/images/` are served as-is, so put web-sized copies there
+rather than camera originals — a 5MB photo is a 5MB download on someone's
+phone. To resize a batch:
+
+```sh
+sips -Z 1600 --setProperty formatOptions 78 original.JPG --out public/images/original.JPG
+```
 
 ## Local development
 

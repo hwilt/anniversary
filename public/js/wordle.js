@@ -238,6 +238,9 @@
     }
     if (nextBtn) nextBtn.hidden = true;
     say('Word ' + (index + 1) + ' of ' + PUZZLES.length + '. ');
+
+    /* Puts the album away again when Play again starts a fresh round. */
+    document.dispatchEvent(new CustomEvent('anniversary:playing'));
   }
 
   function submit() {
@@ -303,6 +306,10 @@
     }
     say('');
     if (resetBtn) resetBtn.hidden = false;
+
+    /* photos.js takes it from here. Announced as an event rather than called
+       directly so this file doesn't need to know the album exists. */
+    document.dispatchEvent(new CustomEvent('anniversary:finished'));
   }
 
   /* ---------- Input ---------- */

@@ -58,6 +58,24 @@
 
     <p class="game-note" data-note hidden></p>
 
+    <!-- The album. photos.js fills the frame and reveals this once every word
+         has been solved; the arrows and the photos themselves come from the
+         PHOTOS list in that file. -->
+    <section class="photos" data-photos hidden>
+      <div class="photo-stage">
+        <div class="photo-frame" data-photo-frame></div>
+
+        <button class="photo-nav prev" type="button" data-photo-prev aria-label="Previous photo">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 4 7 12l8 8" /></svg>
+        </button>
+        <button class="photo-nav next" type="button" data-photo-next aria-label="Next photo">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 4l8 8-8 8" /></svg>
+        </button>
+      </div>
+
+      <p class="photo-count" data-photo-count aria-live="polite"></p>
+    </section>
+
     <div class="keyboard" data-keyboard></div>
 
     <p class="game-status" role="status" aria-live="polite" data-status></p>
@@ -75,6 +93,7 @@
 </div>
 
 <script src="/js/counter.js" defer></script>
+<script src="/js/photos.js" defer></script>
 <script src="/js/wordle.js" defer></script>
 
 </body>
