@@ -11,6 +11,7 @@
 <meta name="robots" content="noindex, nofollow">
 
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="stylesheet" href="/vendor/leaflet/leaflet.css">
 <link rel="stylesheet" href="/css/base.css">
 <link rel="stylesheet" href="/css/home.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -40,6 +41,55 @@
       </div>
     </div>
     <p class="next-up" data-next-up></p>
+  </section>
+
+  <!-- Pins and the distance are drawn from the coordinates in js/map.js. The
+       svg is decorative on its own — the numbered list under it is the real
+       content, and what a screen reader gets. -->
+  <section class="map" id="map">
+    <h2>How far apart</h2>
+    <p class="map-distance" data-map-distance></p>
+
+    <div class="map-frame">
+      <!-- The perforated edge is a dashed stroke with round caps used as a
+           mask: each "dash" is a dot that punches a notch out of the rim, so
+           the holes are genuinely transparent rather than painted on. -->
+      <svg class="map-stamp" viewBox="0 0 60 70" aria-hidden="true">
+        <mask id="stamp-perforation">
+          <rect width="60" height="70" fill="#fff" />
+          <rect width="60" height="70" fill="none" stroke="#000" stroke-width="6"
+                stroke-dasharray="0 8" stroke-linecap="round" />
+        </mask>
+        <rect class="stamp-body" width="60" height="70" mask="url(#stamp-perforation)" />
+        <rect class="stamp-rule" x="8" y="8" width="44" height="54" />
+
+        <!-- Tulips. Stems and leaves first so the blooms sit over them. -->
+        <path class="stamp-stem" d="M30,26 L30,44" />
+        <path class="stamp-stem" d="M22,29 C22,35 26,39.5 29.2,44" />
+        <path class="stamp-stem" d="M38,29.5 C38,35 34,39.5 30.8,44" />
+
+        <path class="stamp-leaf" d="M29.6,43.5 C25,42 20.5,38 18.5,33.2 C23,34.2 27.6,38.2 29.6,43.5 Z" />
+        <path class="stamp-leaf" d="M30.4,43.5 C35,42 39.5,38 41.5,33.2 C37,34.2 32.4,38.2 30.4,43.5 Z" />
+
+        <!-- One bloom outline, placed three times at different sizes. -->
+        <g class="stamp-bloom-side" transform="translate(17.4 19) scale(0.92)">
+          <path d="M5,12.5 C2.3,11.4 0.7,8.6 0.7,5.1 C0.7,2.4 1.9,0.7 3.2,0.7 C4.2,0.7 4.7,1.8 5,3.2 C5.3,1.8 5.8,0.7 6.8,0.7 C8.1,0.7 9.3,2.4 9.3,5.1 C9.3,8.6 7.7,11.4 5,12.5 Z" />
+        </g>
+        <g class="stamp-bloom-side" transform="translate(33.4 19.5) scale(0.92)">
+          <path d="M5,12.5 C2.3,11.4 0.7,8.6 0.7,5.1 C0.7,2.4 1.9,0.7 3.2,0.7 C4.2,0.7 4.7,1.8 5,3.2 C5.3,1.8 5.8,0.7 6.8,0.7 C8.1,0.7 9.3,2.4 9.3,5.1 C9.3,8.6 7.7,11.4 5,12.5 Z" />
+        </g>
+        <g class="stamp-bloom" transform="translate(24.25 12.6) scale(1.15)">
+          <path d="M5,12.5 C2.3,11.4 0.7,8.6 0.7,5.1 C0.7,2.4 1.9,0.7 3.2,0.7 C4.2,0.7 4.7,1.8 5,3.2 C5.3,1.8 5.8,0.7 6.8,0.7 C8.1,0.7 9.3,2.4 9.3,5.1 C9.3,8.6 7.7,11.4 5,12.5 Z" />
+        </g>
+
+        <text class="stamp-text" x="30" y="55" text-anchor="middle">PA</text>
+      </svg>
+
+      <div class="map-canvas" data-map></div>
+      <p class="map-caption" data-map-caption></p>
+    </div>
+
+    <ol class="map-legend" data-map-legend></ol>
   </section>
 
   <section class="game" id="game">
@@ -93,6 +143,9 @@
 </div>
 
 <script src="/js/counter.js" defer></script>
+<!-- Leaflet before map.js, which needs L to already exist. -->
+<script src="/vendor/leaflet/leaflet.js" defer></script>
+<script src="/js/map.js" defer></script>
 <script src="/js/photos.js" defer></script>
 <script src="/js/wordle.js" defer></script>
 

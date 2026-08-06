@@ -2,7 +2,9 @@
 
 A page for our anniversary.
 
-A static site — no build step, no dependencies. Deployed to Cloudflare Workers.
+A static site — no build step, nothing to install. Deployed to Cloudflare
+Workers. The one third-party library, Leaflet, is vendored under
+`public/vendor` and served with everything else.
 
 ## Layout
 
@@ -17,9 +19,11 @@ public/            # everything served publicly (Cloudflare assets directory)
 │   └── error.css  # 404 page only
 ├── js/
 │   ├── counter.js # days together, and time until the next anniversary
+│   ├── map.js     # the map of places, and its coordinates
 │   ├── wordle.js  # the word game, and its puzzle list
 │   └── photos.js  # the album shown once the game is finished
 ├── images/        # web-sized photos for the album
+├── vendor/        # Leaflet, vendored rather than loaded from a CDN
 └── favicon.svg
 wrangler.jsonc     # deploy config (not served)
 ```
@@ -37,6 +41,59 @@ The start date lives in `public/index.html` in two places, and nowhere else:
 - `data-since="YYYY-MM-DD"` on `<section class="counter">`, which is what's counted
 
 Change both together.
+
+## The map
+
+The `PLACES` array at the top of `public/js/map.js`:
+
+```js
+{ name: 'Your place', note: 'Philadelphia', lat: 39.95, lon: -75.17, home: true }
+```
+
+A real map, with roads. Leaflet is vendored in `public/vendor/leaflet` rather
+than loaded from a CDN, so the version is pinned and the page doesn't depend on
+someone else's script host. Map tiles are the one thing still fetched from
+elsewhere — drawing the road network is what a tile server is for.
+
+Tiles are standard OpenStreetMap. The pale "light" basemaps (CARTO Positron,
+Voyager) look tidier in the abstract but draw almost no road detail at this
+zoom, which reads as an empty rectangle — these carry parks, water and a real
+road hierarchy. A CSS filter in `home.css` warms them into the cream and takes
+the blue out of the water; it's scoped to the tile layer alone, so the pins and
+route keep their real colours. Adjust the `sepia` and `contrast` there to taste.
+
+Attribution is required by OpenStreetMap's terms — leave it in place. Their
+tile server is fine for a page this size, but it's a volunteer-funded service
+with a [usage policy](https://operations.osmfoundation.org/policies/tiles/);
+if this ever got real traffic, switch to a commercial tile host.
+
+The map sits on a postcard — lighter card stock than the page, a caption strip,
+a stamp in the corner and a degree of tilt — so the section reads as an object
+on the page rather than a rectangle in the middle of it. The caption is built
+from the two `home` places, so it follows them if they change.
+
+The stamp is inline SVG in `index.html`. Its perforated edge is a dashed stroke
+with round caps used as a mask, so each dash punches a real hole in the rim
+rather than painting one on; that's why it works sitting over the map. It's
+`pointer-events: none`, so it never swallows a click meant for the map.
+
+The distance is measured from the same coordinates, so changing one updates the
+text with it. `home: true` marks the two ends it's measured between; it's a
+straight line, not a driving route. Order in the array is the order the pins are
+numbered, and the view frames all of them automatically.
+
+The scroll wheel doesn't zoom the map until you click it, so scrolling past the
+map doesn't get swallowed. On a touch screen a one-finger drag pans the map
+rather than scrolling the page; `dragging: false` in the map options turns that
+off if it gets annoying.
+
+**Coordinates are kept to two decimals on purpose.** That's about a kilometre
+of slack — enough to land on the right neighbourhood without publishing
+anyone's address on a page that anyone with the link can read. To add a place,
+right-click it on any map, copy the lat/lon, and round it.
+
+One caveat: adding somewhere far away zooms everything out, and pins that are
+close together in reality will start to overlap.
 
 ## The word game
 

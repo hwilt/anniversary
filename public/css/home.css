@@ -82,6 +82,219 @@
 }
 
 /* ===========================================================
+   The map of places
+   =========================================================== */
+.map {
+  margin-top: 14vh;
+  text-align: center;
+}
+
+.map h2 {
+  font-size: clamp(26px, 5vw, 34px);
+  font-weight: 400;
+}
+
+.map-distance {
+  font-size: 15px;
+  opacity: 0.75;
+  margin: 10px auto 28px;
+}
+
+/* The map sits on a card like a printed postcard — mat, caption strip and a
+   degree of tilt — so the section reads as an object placed on the page rather
+   than a rectangle dropped into the middle of it. */
+.map-frame {
+  /* Card stock: lighter and cooler than the page, so the postcard has an edge
+     of its own instead of dissolving into the cream behind it. Local to this
+     component, which is why it isn't a token in base.css. */
+  --paper: #FAF4E7;
+
+  position: relative;
+  max-width: 560px;
+  margin: 0 auto;
+  background: var(--paper);
+  padding: 14px 14px 0;
+  border-radius: 3px;
+  border: 1px solid rgba(43, 42, 37, 0.07);
+  box-shadow: 0 5px 18px rgba(43, 42, 37, 0.16);
+  transform: rotate(-1.1deg);
+}
+
+/* ---------- The stamp ---------- */
+.map-stamp {
+  position: absolute;
+  top: 26px;
+  right: 26px;
+  width: 58px;
+  height: 68px;
+  /* Tilted against the card's own lean, the way one ends up stuck on by hand. */
+  transform: rotate(4deg);
+  filter: drop-shadow(0 2px 3px rgba(43, 42, 37, 0.32));
+  /* Sits over the map, so it must not swallow clicks meant for it. Leaflet's
+     own panes stop at 800. */
+  pointer-events: none;
+  z-index: 900;
+}
+
+/* Stamp paper, not card stock: it lands on top of the map, and anything in the
+   cream-deep range disappears straight into the tiles. */
+.stamp-body { fill: var(--paper); }
+
+.stamp-rule {
+  fill: rgba(123, 37, 37, 0.09);
+  stroke: var(--maroon);
+  stroke-width: 0.9;
+  opacity: 0.55;
+}
+
+/* Tulips. The pinks are local to the stamp — they're the one thing on the page
+   outside the cream/clay/maroon range, which is what makes them read as a
+   printed illustration rather than part of the furniture. */
+.stamp-bloom { fill: #C26B80; }
+.stamp-bloom-side { fill: #D98B9C; }
+
+.stamp-stem {
+  fill: none;
+  stroke: var(--green);
+  stroke-width: 1.4;
+  stroke-linecap: round;
+}
+
+.stamp-leaf {
+  fill: var(--green);
+  opacity: 0.85;
+}
+
+.stamp-text {
+  fill: var(--maroon);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  opacity: 0.75;
+}
+
+.map-canvas {
+  height: clamp(260px, 55vw, 340px);
+  width: 100%;
+  background: var(--cream-deep);
+  border-radius: 2px;
+  /* Keeps the tiles off the card's corners. */
+  overflow: hidden;
+}
+
+/* The strip along the bottom of the card, filled in by map.js from the two
+   places the distance is measured between. */
+.map-caption {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: lowercase;
+  color: var(--green);
+  text-align: center;
+  padding: 12px 2px 14px;
+}
+
+/* Warming the tile layer — and only the tile layer, so the pins keep their real
+   colours — settles the map into the cream instead of sitting on it as a
+   separate rectangle. Enough sepia to take the blue out of the water and
+   motorways, not so much that the map goes flat. */
+.map-canvas .leaflet-tile-pane {
+  filter: sepia(0.45) saturate(0.8) hue-rotate(-8deg) contrast(1.02);
+}
+
+/* ---------- Pins ---------- */
+.map-pin-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--maroon);
+  color: var(--cream);
+  border-radius: 50%;
+  border: 2px solid var(--cream);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  box-shadow: 0 1px 4px rgba(43, 42, 37, 0.35);
+}
+
+/* ---------- Leaflet's own furniture, in the site's voice ---------- */
+.map-canvas .leaflet-container {
+  font-family: var(--font-body);
+  background: var(--cream-deep);
+}
+
+.map-canvas .leaflet-bar a {
+  background: var(--cream);
+  color: var(--ink);
+  border-bottom-color: var(--cream-deep);
+}
+
+.map-canvas .leaflet-bar a:hover {
+  background: var(--cream-deep);
+  color: var(--ink);
+}
+
+.map-canvas .leaflet-control-attribution {
+  background: rgba(238, 224, 204, 0.82);
+  font-size: 10px;
+}
+
+.map-canvas .leaflet-control-attribution a { color: var(--green); }
+
+.map-canvas .leaflet-popup-content-wrapper,
+.map-canvas .leaflet-popup-tip {
+  background: var(--cream);
+  color: var(--ink);
+}
+
+.map-canvas .leaflet-popup-content {
+  font-size: 14px;
+  margin: 10px 14px;
+}
+
+/* ---------- Legend ---------- */
+.map-legend {
+  list-style: none;
+  margin: 26px auto 0;
+  padding: 0;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-align: left;
+}
+
+.map-legend li {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.map-legend-num {
+  flex: 0 0 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--maroon);
+  color: var(--cream);
+  border-radius: 50%;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  /* Baseline alignment on the row would otherwise hang the circle low. */
+  align-self: center;
+}
+
+.map-legend strong {
+  font-weight: 500;
+}
+
+.map-legend-note {
+  font-size: 14px;
+  opacity: 0.7;
+}
+
+/* ===========================================================
    The word game
    =========================================================== */
 .game {
